@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Questão 5 tabuada</title>
+</head>
+<body onload="tabuada()">
+<script>
+function tabuada(){    
+    const numero_escolhido = Number(prompt('Digite um número'));
+    let resultado = '';
+
+    for (let i = 0; i <= 10; i++) {
+         let produto = numero_escolhido * i;
+         resultado += `${numero_escolhido} * ${i} = ${produto}\n`;
+    }
+
+    alert(resultado);
+}
+</script>
+</body>
+</html>

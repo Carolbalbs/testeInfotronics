@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Intervalo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        button {
+            margin-left: 50%;
+            margin-top: 15%;
+        }
+    </style>
+</head>
+<body onload="ordenacao()">
+    <button onclick="gerarjson()">Gerar JSON</button>
+    <script>
+        let numerosOrdenados;
+
+        function ordenacao() {
+            let numeros = [];
+
+            for (let i = 0; i < 5; i++) {
+                numeros.push(parseInt(prompt(`Digite o número ${i + 1}`)));
+            }
+
+            numerosOrdenados = numeros.slice().sort((a, b) => a - b);
+
+            alert(`Números ordenados: ${numerosOrdenados}`);
+        }
+
+        function gerarjson() {
+            const conteudoJson = {
+                numerosOrdenados: numerosOrdenados
+            };
+
+            const jsonString = JSON.stringify(conteudoJson);
+            const blob = new Blob([jsonString], { type: "text/plain;charset=utf-8" });
+            saveAs(blob, "numeros_ordenados.json");
+        };
+    </script>
+    <script src="FileSaver.js"></script>
+</body>
+</html>
