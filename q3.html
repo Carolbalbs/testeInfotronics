@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta de CEP</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<h1>Consulta de CEP</h1>
+
+<label for="cepInput">Digite o CEP:</label>
+<input type="number" id="cepInput" placeholder="Digite o CEP" />
+<button onclick="consultarCEP()">Consultar</button>
+
+<div id="resultado"></div>
+
+<script>
+function consultarCEP() {
+    const cep = document.getElementById('cepInput').value;
+    
+    if (!cep) {
+        alert('Por favor, insira um CEP.');
+        return;
+    }
+
+    const url = `http://viacep.com.br/ws/${cep}/json/`;
+
+    axios.get(url)
+        .then(response => {
+            const result = response.data;
+            exibirResultado(result);
+        })
+        .catch(error => {
+            console.error('Erro ao buscar o CEP:', error);
+            alert('Erro ao buscar o CEP. Verifique se o CEP está correto.');
+        });
+}
+
+function exibirResultado(result) {
+    const resultadoDiv = document.getElementById('resultado');
+
+    if (result.erro) {
+        alert('Erro - CEP não encontrado. Verifique se o CEP está correto.');
+    } else {
+        resultadoDiv.innerHTML = `
+            <p>CEP: ${result.cep}</p>
+            <p>Logradouro: ${result.logradouro}</p>
+            <p>Bairro: ${result.bairro}</p>
+            <p>Cidade: ${result.localidade}</p>
+            <p>Estado: ${result.uf}</p>
+        `;
+    }
+}
+</script>
+
+</body>
+</html>
