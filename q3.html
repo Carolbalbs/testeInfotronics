@@ -3,56 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>Consulta de CEP</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: 'Anek Malayalam',sans-serif;
+            color: #454545;
+            margin: 0;
+        }
+        form {
+            display: block;
+            margin-top: 10%;
+            margin-left: 45%;
+        }
+        #textArea label {
+            color: #444;
+            font-weight: normal;
+        }
+        #textArea input, #textArea textarea {
+            font-size: 10pt;
+            color: #444;
+            border: 1px solid #888;
+            border-radius: 5px;
+        }
+        input {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<h1>Consulta de CEP</h1>
+    <form id="textArea" method="get" action="#">
+        <h3>Insira seu CEP</h3>
+        <input name="cep" type="text" id="cep" value="" size="10" maxlength="8"></label>
+        <button onclick="consultarCEP()">Consultar</button><br>
+        <label>Rua:
+        <input name="rua" type="text" id="rua" size="60"></label><br>
+        <label>Bairro:
+        <input name="bairro" type="text" id="bairro" size="40"></label><br>
+        <label>Cidade:
+        <input name="cidade" type="text" id="cidade" size="40"></label><br>
+        <label>Estado:
+        <input name="uf" type="text" id="uf" size="2"></label><br>
 
-<label for="cepInput">Digite o CEP:</label>
-<input type="number" id="cepInput" placeholder="Digite o CEP" />
-<button onclick="consultarCEP()">Consultar</button>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+           integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+           crossorigin="anonymous"></script>
+        <script>
+            function consultarCEP() {            
+                
+                function limparFormularioCEP() {
+                $("#rua").val("");
+                $("#bairro").val("");
+                $("#cidade").val("");
+                $("#uf").val("");
+            }
+                var cep = $("#cep").val().replace(/\D/g, '');
 
-<div id="resultado"></div>
-
-<script>
-function consultarCEP() {
-    const cep = document.getElementById('cepInput').value;
-    
-    if (!cep) {
-        alert('Por favor, insira um CEP.');
-        return;
-    }
-
-    const url = `http://viacep.com.br/ws/${cep}/json/`;
-
-    axios.get(url)
-        .then(response => {
-            const result = response.data;
-            exibirResultado(result);
-        })
-        .catch(error => {
-            console.error('Erro ao buscar o CEP:', error);
-            alert('Erro ao buscar o CEP. Verifique se o CEP está correto.');
-        });
-}
-
-function exibirResultado(result) {
-    const resultadoDiv = document.getElementById('resultado');
-
-    if (result.erro) {
-        alert('Erro - CEP não encontrado. Verifique se o CEP está correto.');
-    } else {
-        resultadoDiv.innerHTML = `
-            <p>CEP: ${result.cep}</p>
-            <p>Logradouro: ${result.logradouro}</p>
-            <p>Bairro: ${result.bairro}</p>
-            <p>Cidade: ${result.localidade}</p>
-            <p>Estado: ${result.uf}</p>
-        `;
-    }
-}
-</script>
-
+                if (cep !== "") {
+                    $.getJSON(`https://viacep.com.br/ws/${cep}/json/?callback=?`, function (dados) {
+                        if (!("erro" in dados)) {
+                            $("#rua").val(dados.logradouro);
+                            $("#bairro").val(dados.bairro);
+                            $("#cidade").val(dados.localidade);
+                            $("#uf").val(dados.uf);
+                            $("#ibge").val(dados.ibge);
+                        } else {
+                            limparFormularioCEP();
+                            alert("CEP não encontrado.");
+                        }
+                    });
+                }
+            }
+        </script>
+    </form>
 </body>
 </html>
